@@ -7,7 +7,11 @@ class StudentRegistration {
     create() {
         let student = this.readData();
         if (this.validateFields(student)) {
-            this.add(student);
+            if(this.editId == null) {
+                this.add(student)
+            }else{
+                this.modernize(this.editId, student);
+            }
             this.read();
             this.cancel();
         }
@@ -17,6 +21,17 @@ class StudentRegistration {
         this.arrayStudents.push(student);
         this.id++;
     }
+    modernize(id, student) {
+        for(let i = 0; i < this.arrayStudents.length; i++) {
+            if(this.arrayStudents[i].id == id) {
+                this.arrayStudents[i].fullName = student.fullName
+                this.arrayStudents[i].ra = student.ra
+                this.arrayStudents[i].noteOne = student.noteOne
+                this.arrayStudents[i].noteTwo = student.noteTwo
+                this.arrayStudents[i].numberOfAbsences = student.numberOfAbsences
+        }
+    }
+}
     readData() {
         let student = {}
 
@@ -35,6 +50,9 @@ class StudentRegistration {
         document.getElementById('notaUm').value = ""
         document.getElementById('notaDois').value = ""
         document.getElementById('numeroDeFaltas').value = ""
+
+        document.getElementById("btnOne").textContent = "Salvar";
+        this.editId = null;
     }
     read() {
         this.listInTable();
@@ -77,6 +95,8 @@ class StudentRegistration {
         }
     }
     update(data) {
+        this.editId = data.id;
+
         document.getElementById("nomeCompleto").value = data.fullName;
         document.getElementById("ra").value = data.ra;
         document.getElementById("notaUm").value = data.noteOne;
@@ -93,7 +113,7 @@ class StudentRegistration {
                 if (this.arrayStudents[i].id == id) {
                     this.arrayStudents.splice(i, 1)
                     tbody.deleteRow(i);
-                } ff
+                }
             }
         }
     }
